@@ -1,0 +1,9 @@
+service:
+  name: braided-api-ws
+
+provider:
+  name: aws
+
+functions:
+  api-ws:
+    name: braided-api-ws

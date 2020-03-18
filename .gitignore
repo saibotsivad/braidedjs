@@ -1,0 +1,10 @@
+/node_modules
+/secrets.sh
+# The 'serverless' CLI tool generates folders named '.serverless'
+# to hold built folders and files. These add a lot of clutter to
+# a git repo, and also often contain secrets that shouldn't be
+# in your git history.
+/service/*/.serverless/
+# This is the built JS file, you probably don't want it in your
+# git repo/history either.
+/service/*/index.js

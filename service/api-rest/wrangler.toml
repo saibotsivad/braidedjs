@@ -1,0 +1,5 @@
+name = "braided-api-rest"
+type = "javascript"
+account_id = "$$ACCOUNT_ID$$"
+workers_dev = true
+zone_id = "$$ZONE_ID$$"
