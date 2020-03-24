@@ -52,3 +52,27 @@ When you create an IAM user for the Cloudflare Worker to access DynamoDB, you ca
     ]
 }
 ```
+
+## setup
+
+```bash
+npm install
+
+cp secrets.example.sh secrets.sh
+# edit secrets
+
+cp wrangler.example.toml wrangler.toml
+# edit props YOUR_ACCOUNT_ID and YOUR_ZONE_ID
+
+npm run kv:accounts
+# copy out the id to the service/api-rest/wrangler.toml
+
+npm run kv:configs
+# copy out the id to the service/api-rest/wrangler.toml
+```
+
+## dns
+
+Inside Cloudflare, to get www.braidedjs.com to redirect to braidedjs.com you will need to add a CNAME entry for www that is a proxy for braidedjs.com
+
+same for api.braidedjs.com

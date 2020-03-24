@@ -10,10 +10,16 @@
     "dev:service:stream-ws": "echo stream-ws",
     "dev:service:www-redirect": "echo www-redirect",
     "test": "node -r esm app/node_modules/api-rest/handle-request.test.js",
+    "kv:accounts": "source secrets.sh && wrangler kv:namespace create \"BRAIDEDJS_ACCOUNTS\"",
+    "kv:configs": "source secrets.sh && wrangler kv:namespace create \"BRAIDEDJS_CONFIGS\"",
     "build": "rollup -c",
     "predeploy": "npm run build",
     "deploy": "run-s deploy:*",
-    "deploy:api-rest": "source secrets.sh && cd service/api-rest && serverless deploy"
+    "deploy:api-rest": "source secrets.sh && cd service/api-rest && wrangler publish",
+    "deploy:api-ws": "source secrets.sh && cd service/api-ws && serverless deploy",
+    "deploy:stream-ws": "source secrets.sh && cd service/stream-ws && serverless deploy",
+    "deploy:www-redirect": "source secrets.sh && cd service/www-redirect && wrangler publish",
+    "deploy:www-root": "source secrets.sh && cd service/www-root && wrangler publish"
   },
   "repository": {
     "type": "git",
@@ -32,7 +38,7 @@
   },
   "homepage": "https://braidedjs.com",
   "devDependencies": {
-    "@cloudflare/wrangler": "^1.6.0",
+    "@cloudflare/wrangler": "^1.8.2",
     "@rollup/plugin-node-resolve": "^7.0.0",
     "aws-sdk": "^2.616.0",
     "esm": "^3.2.25",
@@ -48,6 +54,7 @@
     "got": "^10.5.5",
     "just-split": "^2.1.0",
     "p-queue": "^6.3.0",
+    "snarkdown": "^1.2.2",
     "trouter": "^3.1.0"
   }
 }

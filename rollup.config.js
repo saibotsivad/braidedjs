@@ -39,4 +39,12 @@ export default [
 		},
 		plugins
 	},
+	{
+		input: './app/node_modules/www-root/index.js',
+		output: {
+			format: 'esm',
+			file: './service/www-root/index.js'
+		},
+		plugins
+	},
 ]
