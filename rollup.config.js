@@ -1,9 +1,15 @@
+import { string } from 'rollup-plugin-string'
+import md from 'rollup-plugin-md'
 import resolve from '@rollup/plugin-node-resolve'
 
 const plugins = [
+	string({
+		include: [ '**/*.html' ]
+	}),
 	resolve({
 		browser: true
-	})
+	}),
+	md()
 ]
 
 export default [
