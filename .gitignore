@@ -5,6 +5,10 @@
 # a git repo, and also often contain secrets that shouldn't be
 # in your git history.
 /service/*/.serverless/
+# The wrangler.toml files are for Cloudflare, and they contain
+# configurable details that are best left out of your git repo
+# where possible.
+/service/*/wrangler.toml
 # This is the built JS file, you probably don't want it in your
 # git repo/history either.
 /service/*/index.js
