@@ -1,0 +1,10 @@
+name = "braidedjs-api-rest"
+type = "javascript"
+account_id = "{{accountId}}"
+workers_dev = {{workersDev}}
+zone_id = "{{zoneId}}"
+route = "api.braidedjs.com/*"
+kv-namespaces = [
+	{ binding = "ACCOUNTS", id = "{{kv.accounts}}" },
+	{ binding = "CONFIGS", id = "{{kv.configs}}" }
+]

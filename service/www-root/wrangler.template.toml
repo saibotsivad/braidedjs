@@ -1,0 +1,6 @@
+name = "braidedjs-www-root"
+type = "javascript"
+account_id = "{{accountId}}"
+workers_dev = {{workersDev}}
+zone_id = "{{zoneId}}"
+route = "braidedjs.com/*"

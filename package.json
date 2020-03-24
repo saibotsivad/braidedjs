@@ -13,7 +13,7 @@
     "kv:accounts": "source secrets.sh && wrangler kv:namespace create \"BRAIDEDJS_ACCOUNTS\"",
     "kv:configs": "source secrets.sh && wrangler kv:namespace create \"BRAIDEDJS_CONFIGS\"",
     "build": "rollup -c",
-    "predeploy": "npm run build",
+    "predeploy": "npm run build && node -r esm build-wrangler-toml.js",
     "deploy": "run-s deploy:*",
     "deploy:api-rest": "source secrets.sh && cd service/api-rest && wrangler publish",
     "deploy:api-ws": "source secrets.sh && cd service/api-ws && serverless deploy",
@@ -51,6 +51,7 @@
     "zora": "^3.1.8"
   },
   "dependencies": {
+    "glob": "^7.1.6",
     "got": "^10.5.5",
     "just-split": "^2.1.0",
     "mustache": "^4.0.1",

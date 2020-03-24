@@ -1,0 +1,6 @@
+name = "braidedjs-www-redirect"
+type = "javascript"
+account_id = "{{accountId}}"
+workers_dev = {{workersDev}}
+zone_id = "{{zoneId}}"
+route = "www.braidedjs.com/*"
