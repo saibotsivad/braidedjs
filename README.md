@@ -76,3 +76,5 @@ npm run kv:configs
 Inside Cloudflare, to get www.braidedjs.com to redirect to braidedjs.com you will need to add a CNAME entry for www that is a proxy for braidedjs.com
 
 same for api.braidedjs.com
+
+

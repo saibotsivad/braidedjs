@@ -1,9 +1,9 @@
 service:
-  name: braided-stream-ws
+  name: braidedjs-stream-ws
 
 provider:
   name: aws
 
 functions:
   stream-ws:
-    name: braided-stream-ws
+    name: braidedjs-stream-ws

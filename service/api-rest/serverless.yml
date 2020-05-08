@@ -1,5 +1,5 @@
 service:
-  name: braided-api-rest
+  name: braidedjs-api-rest
 
 provider:
   name: cloudflare
@@ -12,15 +12,15 @@ plugins:
 
 functions:
   api:
-    name: braided-api-rest
+    name: braidedjs-api-rest
     script: index
     resources:
       kv:
         - variable: CREDENTIALS
-          namespace: BRAIDED_REST_API_CREDENTIALS
+          namespace: BRAIDEDJS_REST_API_CREDENTIALS
         - variable: ACCOUNTS
-          namespace: BRAIDED_REST_API_SCHOOLS
+          namespace: BRAIDEDJS_REST_API_SCHOOLS
     events:
       - http:
-          url: api.braided.com/*
+          url: api.braidedjs.com/*
           method: GET

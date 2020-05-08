@@ -1,0 +1,7 @@
+service:
+  name: braidedjs-dynamodb
+
+provider:
+  name: aws
+
+# TODO

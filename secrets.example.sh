@@ -14,6 +14,8 @@ export CF_ZONE_ID="myzone"
 export KV_ID_ACCOUNTS="abc123"
 export KV_ID_CONFIGS="abc123"
 
-# AWS account
+# AWS Credentials
+export AWS_ACCOUNT_ID="123456789"
 export AWS_REGION="us-east-1"
-# etc
+export AWS_ACCESS_KEY_ID="AKIAEXAMPLEKEY"
+export AWS_SECRET_ACCESS_KEY="abc123batteryhorsestaple"
