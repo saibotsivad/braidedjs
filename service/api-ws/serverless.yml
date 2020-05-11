@@ -1,6 +1,8 @@
 # Documentation for the serverless configuration of WebSockets
 # is available here:
 # https://www.serverless.com/framework/docs/providers/aws/events/websocket/
+#
+# https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html
 
 service:
   name: braidedjs-api-ws
@@ -8,33 +10,65 @@ service:
 provider:
   name: aws
   runtime: nodejs12.x
-  websocketsApiName: custom-websockets-api-name
-  websocketsApiRouteSelectionExpression: $request.body.action
-  # custom routes are selected by the value of the action property in the body
-  logs:
-    websocket: true
   deploymentBucket:
     name: braidedjs
+  websocketsApiName: braidedjs-api-ws
+  # This is the property used to route inbound WS messages (written
+  # in JSON) to different Lambda functions. For example, if the body
+  # looked like this:
+  #
+  #     {
+  #         "req": "subscribe",
+  #         ...other properties
+  #     }
+  #
+  # Then you could define a function like this, which would handle
+  # only those incoming messages:
+  #
+  #     myFunction:
+  #       handler: filename.handler
+  #       events:
+  #         - websocket:
+  #             route: subscribe
+  #
+  websocketsApiRouteSelectionExpression: $request.body.req
+  # If you have lots of WS traffic, and you don't find value in the
+  # logs, you should probably disable this, at least in production.
+  logs:
+    websocket: true
+  # Based on the DynamoDB configuration from elsewhere.
+  # TODO add more notes?
+  environment:
+    TABLE_NAME: braidedjs-${opt:stage, 'dev'}
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 'dynamodb:PutItem'
+        - 'dynamodb:DeleteItem'
+      Resource: arn:aws:dynamodb:*:*:table/braidedjs-${opt:stage, 'dev'}
 
 functions:
-  connectHandler:
-    handler: handler.connectHandler
+  connect:
+    handler: index.connect
     events:
       - websocket:
           route: $connect
         # authorizer: auth # reference the auth function below
         # or
         # authorizer: arn:aws:lambda:us-east-1:1234567890:function:auth
-  disconnectHandler:
-    handler: handler.disconnectHandler
+  disconnect:
+    handler: index.disconnect
     events:
       - websocket:
           route: $disconnect
-  helloHandler:
-    handler: handler.helloHandler
+  subscriber:
+    handler: index.subscriber
     events:
       - websocket:
-          route: hello
+          route: sub
+          routeResponseSelectionExpression: $default
+      - websocket:
+          route: unsub
           routeResponseSelectionExpression: $default
   # auth:
   #   handler: handler.auth

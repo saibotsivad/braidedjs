@@ -38,7 +38,7 @@
   },
   "homepage": "https://braidedjs.com",
   "devDependencies": {
-    "@cloudflare/wrangler": "^1.8.2",
+    "@cloudflare/wrangler": "^1.9.0",
     "@rollup/plugin-node-resolve": "^7.0.0",
     "aws-sdk": "^2.616.0",
     "esm": "^3.2.25",
@@ -46,7 +46,7 @@
     "rollup": "^2.8.2",
     "rollup-plugin-md": "0.0.7",
     "sade": "^1.7.0",
-    "serverless": "^1.70.0",
+    "serverless": "^1.70.1",
     "serverless-cloudflare-workers": "^1.2.0",
     "sign-aws-requests": "^1.0.1",
     "zora": "^3.1.8"
