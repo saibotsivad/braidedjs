@@ -40,7 +40,11 @@ export default [
 			file: './service/api-ws/index.js'
 		},
 		plugins: lambdaPlugins,
-		external: [ ...builtins, 'aws-sdk/clients/dynamodb' ]
+		external: [
+			...builtins,
+			'aws-sdk/clients/apigatewaymanagementapi',
+			'aws-sdk/clients/dynamodb'
+		]
 	},
 	// {
 	// 	input: './app/node_modules/stream-ws/index.js',

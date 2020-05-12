@@ -31,7 +31,7 @@ provider:
   #         - websocket:
   #             route: subscribe
   #
-  websocketsApiRouteSelectionExpression: $request.body.req
+  # websocketsApiRouteSelectionExpression: $request.body.0
   # If you have lots of WS traffic, and you don't find value in the
   # logs, you should probably disable this, at least in production.
   logs:
@@ -65,10 +65,11 @@ functions:
     handler: index.subscriber
     events:
       - websocket:
-          route: sub
+          route: $default
+          # route: sub
           routeResponseSelectionExpression: $default
-      - websocket:
-          route: unsub
-          routeResponseSelectionExpression: $default
+      # - websocket:
+      #     route: unsub
+      #     routeResponseSelectionExpression: $default
   # auth:
   #   handler: handler.auth
