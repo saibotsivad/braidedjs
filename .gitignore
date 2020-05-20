@@ -11,4 +11,4 @@
 /service/*/wrangler.toml
 # This is the built JS file, you probably don't want it in your
 # git repo/history either.
-/service/*/index.js
+/service/*/*.js

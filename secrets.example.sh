@@ -19,3 +19,7 @@ export AWS_ACCOUNT_ID="123456789"
 export AWS_REGION="us-east-1"
 export AWS_ACCESS_KEY_ID="AKIAEXAMPLEKEY"
 export AWS_SECRET_ACCESS_KEY="abc123batteryhorsestaple"
+
+# Running Local
+export IS_LOCAL="true"
+export TABLE_NAME="braidedjs-dev"

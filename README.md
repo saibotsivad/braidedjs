@@ -77,4 +77,60 @@ Inside Cloudflare, to get www.braidedjs.com to redirect to braidedjs.com you wil
 
 same for api.braidedjs.com
 
+## tables
 
+single dynamodb table
+
+### websocket connections
+
+Note: subscriptions are defined by a couplet of the API path string, and
+the identifier of it, which is generated server side and is used by the
+client to unsubscribe later.
+
+queries:
+- get a list of all connections subscribed to a collection
+	- for posting updates of a collection
+	- struct:
+		pk: `coll:$COLLECTION`
+		sk: `conn:$CONNECTION_ID`
+		gid: `ws:$USER_ID:conn:$CONNECTION_ID`
+	- data:
+		api: `$API_ID`
+		subid: `$SUBSCRIPTION_ID`
+		subtype: `FULL|DIFF|DELETE|PING`
+- get a list of all collection subscriptions for a connection
+	- to remove subscription on unsubscribe
+	- struct:
+		pk: `conn:$CONNECTION_ID`
+		sk: `subid:$SUBSCRIPTION_ID`
+		gid: `ws:$USER_ID:conn:$CONNECTION_ID`
+	- data:
+		api: `$API_ID`
+		coll: `$COLLECTION`
+- get a list of all connections for a user
+	- to remove when user account is locked
+	- to support locking out a session, e.g. user security dropping active session
+	- struct:
+		pk: `user:$USER_ID`
+		sk: `conn:$CONNECTION_ID`
+		gid: `ws:$USER_ID:conn:$CONNECTION_ID`
+	- data:
+		api: `$API_ID`
+		session:
+			headers: the stringified headers, which has user agent, ip address, etc.
+
+
+
+- pk: `ws:$COLLECTION` e.g. `/acct/$ACCT_ID/system`
+- sk: `user:$USER_ID`
+- additional data
+	- id: the id as comes from the user
+	- expires:
+		- the date of creation
+		- ttl on this one, maybe like 1 day or something?
+
+creates and delete by pk+sk
+
+lookups for broadcast on pk only
+
+### f

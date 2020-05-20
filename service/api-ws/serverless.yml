@@ -31,7 +31,8 @@ provider:
   #         - websocket:
   #             route: subscribe
   #
-  # websocketsApiRouteSelectionExpression: $request.body.0
+  #websocketsApiRouteSelectionExpression: $request.body.req
+
   # If you have lots of WS traffic, and you don't find value in the
   # logs, you should probably disable this, at least in production.
   logs:
@@ -39,37 +40,40 @@ provider:
   # Based on the DynamoDB configuration from elsewhere.
   # TODO add more notes?
   environment:
-    TABLE_NAME: braidedjs-${opt:stage, 'dev'}
+    TABLE_NAME: braidedjs-TODO-${opt:stage, 'dev'}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
-        - 'dynamodb:PutItem'
+        - 'dynamodb:BatchWriteItem'
         - 'dynamodb:DeleteItem'
-      Resource: arn:aws:dynamodb:*:*:table/braidedjs-${opt:stage, 'dev'}
+        - 'dynamodb:PutItem'
+        - 'dynamodb:Query'
+      Resource: arn:aws:dynamodb:*:*:table/braidedjs-TODO-${opt:stage, 'dev'}
+    - Effect: 'Allow'
+      Action:
+        - 'dynamodb:Query'
+      Resource: arn:aws:dynamodb:*:*:table/braidedjs-TODO-${opt:stage, 'dev'}/index/gid-lookup
 
 functions:
   connect:
-    handler: index.connect
+    handler: connect.handler
     events:
       - websocket:
           route: $connect
-        # authorizer: auth # reference the auth function below
-        # or
-        # authorizer: arn:aws:lambda:us-east-1:1234567890:function:auth
+          authorizer:
+            name: auth # name of the authentication function, defined below
+            identitySource:
+              - 'route.request.querystring.token'
   disconnect:
-    handler: index.disconnect
+    handler: disconnect.handler
     events:
       - websocket:
           route: $disconnect
-  subscriber:
-    handler: index.subscriber
+  pubsub:
+    handler: pubsub.handler
     events:
       - websocket:
           route: $default
-          # route: sub
           routeResponseSelectionExpression: $default
-      # - websocket:
-      #     route: unsub
-      #     routeResponseSelectionExpression: $default
-  # auth:
-  #   handler: handler.auth
+  auth:
+    handler: auth.handler

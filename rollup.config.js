@@ -1,5 +1,6 @@
 import { string } from 'rollup-plugin-string'
 import builtins from 'builtin-modules'
+import commonjs from '@rollup/plugin-commonjs'
 import md from 'rollup-plugin-md'
 import resolve from '@rollup/plugin-node-resolve'
 
@@ -14,15 +15,28 @@ const browserPlugins = [
 ]
 
 const lambdaPlugins = [
-	string({
-		include: [ '**/*.html' ]
-	}),
 	resolve({
 		browser: false,
 		preferBuiltins: true,
 	}),
+	commonjs(),
 	md()
 ]
+
+const webSocketConfigs = [ 'connect', 'disconnect', 'pubsub', 'auth' ]
+	.map(key => ({
+		input: `./app/node_modules/api-ws/${key}.js`,
+		output: {
+			format: 'cjs',
+			file: `./service/api-ws/${key}.js`
+		},
+		plugins: lambdaPlugins,
+		external: [
+			...builtins,
+			'aws-sdk/clients/apigatewaymanagementapi',
+			'aws-sdk/clients/dynamodb'
+		]
+	}))
 
 export default [
 	// {
@@ -33,19 +47,7 @@ export default [
 	// 	},
 	// 	plugins: browserPlugins
 	// },
-	{
-		input: './app/node_modules/api-ws/index.js',
-		output: {
-			format: 'cjs',
-			file: './service/api-ws/index.js'
-		},
-		plugins: lambdaPlugins,
-		external: [
-			...builtins,
-			'aws-sdk/clients/apigatewaymanagementapi',
-			'aws-sdk/clients/dynamodb'
-		]
-	},
+	...webSocketConfigs,
 	// {
 	// 	input: './app/node_modules/stream-ws/index.js',
 	// 	output: {

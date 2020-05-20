@@ -3,5 +3,47 @@ service:
 
 provider:
   name: aws
+  deploymentBucket:
+    name: braidedjs
 
-# TODO
+# https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html
+# You can define a maximum of 5 local secondary indexes.
+# There is an initial limit of 20 global secondary indexes per table
+
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html#cfn-dynamodb-table-gsi
+# If you update a table to include a new global secondary index, AWS
+# CloudFormation initiates the index creation and then proceeds with
+# the stack update. AWS CloudFormation doesn't wait for the index to
+# complete creation because the backfilling phase can take a long time,
+# depending on the size of the table. You can't use the index or update
+# the table until the index's status is ACTIVE. 
+
+resources:
+  Resources:
+    dataTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: braidedjs-TODO-${opt:stage, 'dev'}
+        BillingMode: PAY_PER_REQUEST
+        TimeToLiveSpecification:
+          AttributeName: expires
+          Enabled: true
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: sk
+            AttributeType: S
+          - AttributeName: gid
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: sk
+            KeyType: RANGE
+        GlobalSecondaryIndexes:
+          - IndexName: gid-lookup
+            Projection:
+              ProjectionType: KEYS_ONLY
+            KeySchema:
+              - AttributeName: gid
+                KeyType: HASH

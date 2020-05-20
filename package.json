@@ -17,6 +17,7 @@
     "deploy": "run-s deploy:*",
     "deploy:api-rest": "source secrets.sh && cd service/api-rest && wrangler publish",
     "deploy:api-ws": "source secrets.sh && cd service/api-ws && serverless deploy",
+    "deploy:aws-dynamodb": "source secrets.sh && cd service/aws-dynamodb && serverless deploy",
     "deploy:stream-ws": "source secrets.sh && cd service/stream-ws && serverless deploy",
     "deploy:www-redirect": "source secrets.sh && cd service/www-redirect && wrangler publish",
     "deploy:www-root": "source secrets.sh && cd service/www-root && wrangler publish"
@@ -39,6 +40,7 @@
   "homepage": "https://braidedjs.com",
   "devDependencies": {
     "@cloudflare/wrangler": "^1.9.0",
+    "@rollup/plugin-commonjs": "^11.1.0",
     "@rollup/plugin-node-resolve": "^7.0.0",
     "aws-sdk": "^2.616.0",
     "esm": "^3.2.25",
@@ -58,6 +60,7 @@
     "mustache": "^4.0.1",
     "p-queue": "^6.3.0",
     "rollup-plugin-string": "^3.0.0",
+    "shortid": "^2.2.15",
     "snarkdown": "^1.2.2",
     "trouter": "^3.1.0"
   }
