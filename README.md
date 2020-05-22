@@ -93,7 +93,7 @@ queries:
 	- struct:
 		pk: `coll:$COLLECTION`
 		sk: `conn:$CONNECTION_ID`
-		gid: `ws:$USER_ID:conn:$CONNECTION_ID`
+		gid: `ws:$USER_ID:sess:$SESSION_ID`
 	- data:
 		api: `$API_ID`
 		subid: `$SUBSCRIPTION_ID`
@@ -103,34 +103,48 @@ queries:
 	- struct:
 		pk: `conn:$CONNECTION_ID`
 		sk: `subid:$SUBSCRIPTION_ID`
-		gid: `ws:$USER_ID:conn:$CONNECTION_ID`
+		gid: `ws:$USER_ID:sess:$SESSION_ID`
 	- data:
-		api: `$API_ID`
 		coll: `$COLLECTION`
 - get a list of all connections for a user
 	- to remove when user account is locked
 	- to support locking out a session, e.g. user security dropping active session
 	- struct:
-		pk: `user:$USER_ID`
-		sk: `conn:$CONNECTION_ID`
-		gid: `ws:$USER_ID:conn:$CONNECTION_ID`
+		pk: `user:$USER_ID:conn`
+		sk: `sess:$SESSION_ID:conn:$CONNECTION_ID`
+		gid: `ws:$USER_ID:sess:$SESSION_ID`
 	- data:
 		api: `$API_ID`
 		session:
 			headers: the stringified headers, which has user agent, ip address, etc.
 
+### users
 
-
-- pk: `ws:$COLLECTION` e.g. `/acct/$ACCT_ID/system`
-- sk: `user:$USER_ID`
-- additional data
-	- id: the id as comes from the user
-	- expires:
-		- the date of creation
-		- ttl on this one, maybe like 1 day or something?
-
-creates and delete by pk+sk
-
-lookups for broadcast on pk only
-
-### f
+- get a list of users by email address (could be multiple per user)
+	- for signing in with username+password
+	- struct:
+		pk: `email:$NORMALIZED_EMAIL_ADDRESS`
+		sk: `user:$USER_ID`
+		gid: `user:$USER_ID`
+	- data:
+		secret:
+			hash: the hashed password
+			expires: the unix date when this secret will expire
+- get a list of active sessions (websocket and cookie) for user
+	- for listing to audit, aka to delete/deactivate sessions
+	- for authenticating HTTP requests and WS connections (user+session id in token)
+	- struct:
+		pk: `user:$USER_ID:sess`
+		sk: `sess:$SESSION_ID`
+		gid: `user:$USER_ID:sess:$SESSION_ID`
+	- data:
+		api: `$API_ID`
+		cookie:
+			hash: the hashed cookie token
+			expires: the unix date that the cookie token expires
+		ws:
+			hash: the hashed websocket token
+			expires: the unix date that the websocket token expires
+		create: the unix date of creation
+		headers:
+			the stringified headers of the HTTP request used to create the session, which has user agent, ip address, etc.
