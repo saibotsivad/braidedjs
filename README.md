@@ -148,3 +148,68 @@ queries:
 		create: the unix date of creation
 		headers:
 			the stringified headers of the HTTP request used to create the session, which has user agent, ip address, etc.
+
+
+---
+
+## Cookie strategy
+
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
+
+login request
+username+password
+--->
+access_token=15 minute
+refresh_token=60 days or whatever
+<---
+Set-Cookie: ACCESS_TOKEN=token1; HttpOnly; Secure; Domain=braidedjs.com
+Set-Cookie: REFRESH_TOKEN=token2; HttpOnly; Secure; Domain=braidedjs.com; Path=/api/refresh
+
+
+then on calls to the api
+Cookie: ACCESS_TOKEN=token1
+<---
+oops 401 or whatever
+call the /api/refresh
+Cookie: REFRESH_TOKEN=token2
+--->
+Set-Cookie: ACCESS_TOKEN=token1; etc.
+
+## Token for WS
+
+needed to get token for websocket
+
+you would call like /api/ws_token
+it would give you long lasting token
+
+if your WS connection drops, you start over
+
+on API side, you log the token etc and can kick it manually
+
+## Token
+
+get token
+requires cookie?
+--->
+access_token=15 minutes
+refresh_token=60 days or whatever
+<---
+on body
+{
+	access_token,
+	refresh_token,
+	...etc
+}
+
+then you use the token like normal
+used for non-browser services
+
+
+
+[
+	"001",
+	"SUBSCRIBE",
+	[
+		[ "/foo/bar", "DIFF" ]
+	]
+]
